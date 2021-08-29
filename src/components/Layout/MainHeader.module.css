@@ -1,0 +1,33 @@
+.nav {
+  display: flex;
+  background-color: #333;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 14px;
+}
+
+.logo a {
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.links a {
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.links a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.links a.active {
+  background-color: #24b47e;
+  color: white;
+}

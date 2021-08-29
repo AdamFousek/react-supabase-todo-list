@@ -1,0 +1,33 @@
+.todo {
+  border: 1px solid #AAA;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(200,200,200,0.5);
+  transition: 0.3s;
+  width: 30%;
+}
+
+.todo:hover {
+  box-shadow: 0 8px 16px 0 rgba(200,200,200,0.5);
+}
+
+.todo h3 {
+  border-bottom: 1px solid white;
+  margin: 0;
+  padding: 1rem;
+}
+
+.content {
+  text-align: left;
+  margin: 0;
+  padding: 1rem;
+}
+
+.content .complete {
+  text-align: center;
+  color: #35ff46;
+}
+
+.content .incomplete {
+  text-align: center;
+  color: #FFA500;
+} 

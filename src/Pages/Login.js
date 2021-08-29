@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { supabase } from './../../supabase/supabase-client'
+import { supabase } from '../supabase/supabase-client'
 
-export default function Auth() {
+const Login = () => {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
 
@@ -48,3 +48,5 @@ export default function Auth() {
     </div>
   )
 }
+
+export default Login;

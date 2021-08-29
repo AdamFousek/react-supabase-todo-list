@@ -1,10 +1,16 @@
-import './index.css'
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { supabase } from './supabase/supabase-client'
-import Auth from './components/Auth/Auth'
-import Account from './components/Account/Account'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import MainHeader from './components/Layout/MainHeader';
+import Homepage from './Pages/Homepage';
+import Dashboard from './Pages/Dashboard';
+import Login from './Pages/Login';
+import NotFound from './Pages/NotFound';
+import Profile from './Pages/Profile';
+import Todos from './Pages/Todos';
 
-export default function Home() {
+
+const App = () => {
   const [session, setSession] = useState(null)
 
   useEffect(() => {
@@ -13,11 +19,35 @@ export default function Home() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
     })
-  }, [])
+  }, []);
 
   return (
-    <div className="container" style={{ padding: '50px 0 100px 0' }}>
-      {!session ? <Auth /> : <Account key={session.user.id} session={session} />}
-    </div>
+    <Fragment>
+      <MainHeader session={session} />
+      <main className='main'>
+        <Switch>
+          <Route path='/' exact>
+            {!session && <Homepage />}
+            {session && <Dashboard session={session} />}
+          </Route>
+          <Route path='/login' exact>
+            <Login />
+          </Route>
+          <Route path='/profile' exect>
+            {!session && <Redirect to='/' />}
+            {session && <Profile session={session} />}
+          </Route>
+          <Route path='/todos' exect>
+            {!session && <Redirect to='/' />}
+            {session && <Todos session={session} />}
+          </Route>
+          <Route path='*'>
+            <NotFound />
+          </Route>
+        </Switch>
+      </main>
+    </Fragment>
   )
 }
+
+export default App;

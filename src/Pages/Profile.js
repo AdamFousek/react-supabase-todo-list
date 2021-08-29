@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { supabase } from './../../supabase/supabase-client';
+import { supabase } from '../supabase/supabase-client';
+import Card from '../components/UI/Card';
 
-export default function Account({ session }) {
+const Profile = ({ session }) => {
   const [loading, setLoading] = useState(true)
   const [username, setUsername] = useState(null)
   const [website, setWebsite] = useState(null)
@@ -65,7 +66,7 @@ export default function Account({ session }) {
     }
   }
 
-  return (
+  return <Card>
     <div className="form-widget">
       <div>
         <label htmlFor="email">Email</label>
@@ -106,5 +107,7 @@ export default function Account({ session }) {
         </button>
       </div>
     </div>
-  )
+  </Card>;
 }
+
+export default Profile;
