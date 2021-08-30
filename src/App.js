@@ -8,6 +8,7 @@ import Login from './Pages/Login';
 import NotFound from './Pages/NotFound';
 import Profile from './Pages/Profile';
 import Todos from './Pages/Todos';
+import TodoDetail from './Pages/TodoDetail';
 
 
 const App = () => {
@@ -33,13 +34,17 @@ const App = () => {
           <Route path='/login' exact>
             <Login />
           </Route>
-          <Route path='/profile' exect>
+          <Route path='/profile' exact>
             {!session && <Redirect to='/' />}
             {session && <Profile session={session} />}
           </Route>
-          <Route path='/todos' exect>
+          <Route path='/todos' exact>
             {!session && <Redirect to='/' />}
             {session && <Todos session={session} />}
+          </Route>
+          <Route path='/todos/:todoId'>
+            {!session && <Redirect to='/' />}
+            {session && <TodoDetail session={session} />}
           </Route>
           <Route path='*'>
             <NotFound />

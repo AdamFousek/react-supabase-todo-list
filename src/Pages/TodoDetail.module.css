@@ -1,0 +1,9 @@
+.content .complete {
+  text-align: center;
+  color: #35ff46;
+}
+
+.content .incomplete {
+  text-align: center;
+  color: #FFA500;
+} 

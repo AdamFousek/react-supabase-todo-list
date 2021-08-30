@@ -1,5 +1,5 @@
 .todos {
   display: flex;
   justify-content: space-around;
-  align-items: top;
+  flex-wrap: wrap;
 }

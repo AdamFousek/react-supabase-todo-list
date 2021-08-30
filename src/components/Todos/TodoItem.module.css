@@ -3,7 +3,8 @@
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(200,200,200,0.5);
   transition: 0.3s;
-  width: 30%;
+  flex: 0 0 30%;
+  margin: 1rem auto;
 }
 
 .todo:hover {
