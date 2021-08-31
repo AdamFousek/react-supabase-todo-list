@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 const TodoItem = (props) => {
   const { todo } = props;
 
-  const convertTimestamp = (timestamp) => {
-    const date = new Date(timestamp * 1000);
+  const convertTimestamp = (convertedDate) => {
+    const date = new Date(convertedDate);
     const day = date.getDate();
     const month = date.getMonth();
     const year = date.getFullYear();
@@ -24,7 +24,7 @@ const TodoItem = (props) => {
       {completeField}
       <p>Due date: {convertTimestamp(todo.due_date)}</p>
       <button className={classes.button}>{buttonText}</button>
-      <p className='red'>
+      <p className={classes.link}>
         <Link to={`/todos/${todo.id}`}>Show todo</Link>
       </p>
     </div>

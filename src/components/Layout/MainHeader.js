@@ -4,8 +4,6 @@ import { NavLink } from 'react-router-dom';
 const MainHeader = (props) => {
   const { session } = props;
 
-  console.log('test');
-
   if (!session) {
     return <header className={classes.nav}>
       <div className={classes.logo}>

@@ -1,10 +1,10 @@
 import Card from "../UI/Card";
 import { useState } from "react";
 
-const AddTodoForm = () => {
+const AddTodoForm = (props) => {
   const [task, setTask] = useState(null);
   const [dueDate, setDuedate] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(props.error);
 
   const addTodoHandler = (e) => {
     e.preventDefault();
@@ -18,7 +18,7 @@ const AddTodoForm = () => {
       return;
     }
 
-    console.log({ task, dueDate });
+    props.onAddTodoSubmit({ task, dueDate });
   }
   return <Card>
     <form onSubmit={addTodoHandler}>
