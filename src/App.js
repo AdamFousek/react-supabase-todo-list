@@ -9,13 +9,15 @@ import NotFound from './Pages/NotFound';
 import Profile from './Pages/Profile';
 import Todos from './Pages/Todos';
 import TodoDetail from './Pages/TodoDetail';
+import AddTodo from './Pages/AddTodo';
 
 
 const App = () => {
   const [session, setSession] = useState(null)
 
   useEffect(() => {
-    setSession(supabase.auth.session())
+    supabase.auth.refreshSession();
+    setSession(supabase.auth.session());
 
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
@@ -45,6 +47,10 @@ const App = () => {
           <Route path='/todos/:todoId'>
             {!session && <Redirect to='/' />}
             {session && <TodoDetail session={session} />}
+          </Route>
+          <Route path='/add-todo' exact>
+            {!session && <Redirect to='/' />}
+            {session && <AddTodo session={session} />}
           </Route>
           <Route path='*'>
             <NotFound />

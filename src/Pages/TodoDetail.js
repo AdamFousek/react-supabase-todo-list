@@ -1,4 +1,5 @@
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import classes from './TodoDetail.module.css';
 
 const DUMMY_TODOS = [
@@ -19,6 +20,13 @@ const TodoDetail = (prosp) => {
     <h3>{completeField}</h3>
     <p>Due date: Date</p>
     <p>Inserted date: Date</p>
+    <div className={classes.actions}>
+      <button className={classes.red}>Delete todo</button>
+      <button>Mark as complete</button>
+    </div>
+    <div>
+      <Link to="/todos">Go back</Link>
+    </div>
   </section>
 }
 

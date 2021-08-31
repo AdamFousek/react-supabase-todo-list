@@ -7,3 +7,32 @@
   text-align: center;
   color: #FFA500;
 } 
+
+.actions {
+  width: 80%;
+  margin: 1rem auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.actions button {
+  width: 40%;
+  padding: 10px;
+  margin: 10px 0;
+}
+  
+.actions button:hover {
+  border-color: white;
+  transition: 0.3s;
+}
+
+.actions button.red {
+  color: #8d1212;
+  border-color: #6b1a1a;
+}
+
+.actions button.red:hover {
+  border-color: red;
+  transition: 0.3s;
+}

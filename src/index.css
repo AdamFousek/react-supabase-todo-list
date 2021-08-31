@@ -387,3 +387,7 @@ a:hover {
   color: white;
   text-decoration: underline;
 }
+
+.error {
+  color: #8d1212;
+}

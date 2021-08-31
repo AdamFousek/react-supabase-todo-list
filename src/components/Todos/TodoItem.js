@@ -15,13 +15,18 @@ const TodoItem = (props) => {
   };
 
   const completeField = todo.is_complete === true ? <p className={classes.complete}>Complete</p> : <p className={classes.incomplete}>Incomplete</p>
+
+  const buttonText = todo.is_complete === true ? 'Not completed' : 'Complete todo';
+
   return <div className={classes.todo}>
     <h3>{todo.task}</h3>
     <div className={classes.content}>
-      <p>Created at: {convertTimestamp(todo.inserted_at)}</p>
-      <p>Due date: {convertTimestamp(todo.due_date)}</p>
       {completeField}
-      <Link to={`/todos/${todo.id}`}>Show todo</Link>
+      <p>Due date: {convertTimestamp(todo.due_date)}</p>
+      <button className={classes.button}>{buttonText}</button>
+      <p className='red'>
+        <Link to={`/todos/${todo.id}`}>Show todo</Link>
+      </p>
     </div>
   </div>
 }

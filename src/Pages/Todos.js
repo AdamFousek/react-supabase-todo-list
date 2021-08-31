@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import TodoList from "../components/Todos/TodoList";
 
 const DUMMY_TODOS = [
@@ -8,10 +9,19 @@ const DUMMY_TODOS = [
 ]
 
 const Todos = (props) => {
+  const completeTodos = DUMMY_TODOS.filter(item => item.is_complete === true);
+  const incompleteTodos = DUMMY_TODOS.filter(item => item.is_complete !== true);
   return <section>
-    <h1>Welcome!</h1>
-    <h2>Your todos for today:</h2>
-    <TodoList todos={DUMMY_TODOS} />
+    <h1>Your todos</h1>
+    <Link to='/add-todo'>Add new todo!</Link>
+    <section>
+      <h3>Incomplete todos:</h3>
+      <TodoList todos={incompleteTodos} />
+    </section>
+    <section>
+      <h3>Complete todos:</h3>
+      <TodoList todos={completeTodos} />
+    </section>
   </section>
 }
 
