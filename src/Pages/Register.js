@@ -2,7 +2,7 @@ import { useState, useRef, useContext } from 'react'
 import { AuthContext } from '../store/auth-context';
 import { supabase } from '../supabase/supabase-client'
 
-const Login = () => {
+const Register = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
@@ -11,10 +11,10 @@ const Login = () => {
 
   const authCtx = useContext(AuthContext);
 
-  const handleLogin = async (e) => {
+  const handleRegistration = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const { user, session, error } = await supabase.auth.signIn({
+    const { user, session, error } = await supabase.auth.signUp({
       email: emailInputRef.current.value,
       password: passwordInputRef.current.value,
     })
@@ -23,14 +23,16 @@ const Login = () => {
       setLoading(false);
       return;
     }
+    console.log({ user, session });
     authCtx.login(user, session);
+    setLoading(false);
   }
 
   return (
     <div className="row flex flex-center">
       <div className="col-6 form-widget">
-        <h1 className="header">Login</h1>
-        <form onSubmit={handleLogin}>
+        <h1 className="header">Registration</h1>
+        <form onSubmit={handleRegistration}>
           <div>
             <label htmlFor="email">Email</label>
             <input
@@ -60,7 +62,7 @@ const Login = () => {
               className={'button block'}
               disabled={loading}
             >
-              {loading ? <span>Loading</span> : <span>Login</span>}
+              {loading ? <span>Loading</span> : <span>Register</span>}
             </button>
           </div>
         </form>
@@ -69,4 +71,4 @@ const Login = () => {
   )
 }
 
-export default Login;
+export default Register;

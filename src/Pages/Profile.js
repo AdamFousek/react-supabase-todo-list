@@ -1,16 +1,30 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { useHistory } from 'react-router';
 import { supabase } from '../supabase/supabase-client';
 import Card from '../components/UI/Card';
+import { AuthContext } from '../store/auth-context';
 
 const Profile = ({ session }) => {
-  const [loading, setLoading] = useState(true)
-  const [username, setUsername] = useState(null)
-  const [website, setWebsite] = useState(null)
-  const [avatar_url, setAvatarUrl] = useState(null)
+  const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState(null);
+  const [website, setWebsite] = useState(null);
+  const [avatar_url, setAvatarUrl] = useState(null);
+  const [error, setError] = useState(null);
+
+  const history = useHistory();
+
+  const authCtx = useContext(AuthContext);
 
   useEffect(() => {
-    getProfile()
+    if (!session) {
+      getProfile()
+    }
   }, [session])
+
+  const logoutHandler = () => {
+    setError(authCtx.logout());
+    history.replace('/login');
+  }
 
   async function getProfile() {
     try {
@@ -100,9 +114,11 @@ const Profile = ({ session }) => {
           {loading ? 'Loading ...' : 'Update'}
         </button>
       </div>
-
       <div>
-        <button className="button block" onClick={() => supabase.auth.signOut()}>
+        {error && <p>{error.message}</p>}
+      </div>
+      <div>
+        <button className="button block" onClick={logoutHandler}>
           Sign Out
         </button>
       </div>

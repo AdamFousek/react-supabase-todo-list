@@ -11,6 +11,7 @@ const MainHeader = (props) => {
       </div>
       <div className={classes.links}>
         <NavLink to='/login' activeClassName={classes.active}>Login</NavLink>
+        <NavLink to='/register' activeClassName={classes.active}>Register</NavLink>
       </div>
     </header>;
   }

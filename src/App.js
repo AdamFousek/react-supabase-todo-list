@@ -1,5 +1,4 @@
-import { Fragment, useState, useEffect } from 'react'
-import { supabase } from './supabase/supabase-client'
+import { Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import MainHeader from './components/Layout/MainHeader';
 import Homepage from './Pages/Homepage';
@@ -10,19 +9,14 @@ import Profile from './Pages/Profile';
 import Todos from './Pages/Todos';
 import TodoDetail from './Pages/TodoDetail';
 import AddTodo from './Pages/AddTodo';
+import { useContext } from 'react';
+import { AuthContext } from './store/auth-context';
+import Register from './Pages/Register';
 
 
 const App = () => {
-  const [session, setSession] = useState(null)
-
-  useEffect(() => {
-    supabase.auth.refreshSession();
-    setSession(supabase.auth.session());
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-  }, []);
+  const authCtx = useContext(AuthContext);
+  const session = authCtx.session;
 
   return (
     <Fragment>
@@ -34,7 +28,12 @@ const App = () => {
             {session && <Dashboard session={session} />}
           </Route>
           <Route path='/login' exact>
-            <Login />
+            {!session && <Login />}
+            {session && <Redirect to='/profile' />}
+          </Route>
+          <Route path='/register' exact>
+            {!session && <Register />}
+            {session && <Redirect to='/profile' />}
           </Route>
           <Route path='/profile' exact>
             {!session && <Redirect to='/' />}
