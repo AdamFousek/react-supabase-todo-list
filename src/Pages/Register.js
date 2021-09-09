@@ -1,6 +1,5 @@
-import { useState, useRef, useContext } from 'react'
+import { useState, useRef } from 'react'
 import { useHistory } from 'react-router';
-import { AuthContext } from '../store/auth-context';
 import { supabase } from '../supabase/supabase-client'
 
 const Register = () => {
@@ -16,7 +15,7 @@ const Register = () => {
   const handleRegistration = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const { user, session, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: emailInputRef.current.value,
       password: passwordInputRef.current.value,
     })
