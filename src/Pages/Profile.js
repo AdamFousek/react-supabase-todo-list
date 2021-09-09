@@ -1,78 +1,41 @@
 import { useState, useEffect, useContext } from 'react'
-import { useHistory } from 'react-router';
-import { supabase } from '../supabase/supabase-client';
 import Card from '../components/UI/Card';
 import { AuthContext } from '../store/auth-context';
 
-const Profile = ({ session }) => {
+const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState(null);
   const [website, setWebsite] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
   const [error, setError] = useState(null);
 
-  const history = useHistory();
-
   const authCtx = useContext(AuthContext);
+  const user = authCtx.user;
 
   useEffect(() => {
-    if (!session) {
-      getProfile()
-    }
-  }, [session])
+    (async () => {
+      try {
+        setLoading(true)
+        const { username, website, avatar_url } = await authCtx.getProfile();
+        setUsername(username);
+        setWebsite(website);
+        setAvatarUrl(avatar_url);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false)
+      }
+    })();
+  }, [authCtx])
 
-  const logoutHandler = () => {
-    setError(authCtx.logout());
-    history.replace('/login');
-  }
-
-  async function getProfile() {
+  const updateProfileHandler = async () => {
     try {
       setLoading(true)
-      const user = supabase.auth.user()
-
-      let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`username, website, avatar_url`)
-        .eq('id', user.id)
-        .single()
-
-      if (error && status !== 406) {
-        throw error
-      }
-
-      if (data) {
-        setUsername(data.username)
-        setWebsite(data.website)
-        setAvatarUrl(data.avatar_url)
-      }
-    } catch (error) {
-      alert(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function updateProfile({ username, website, avatar_url }) {
-    try {
-      setLoading(true)
-      const user = supabase.auth.user()
-
-      const updates = {
-        id: user.id,
+      await authCtx.updateProfile({
         username,
         website,
-        avatar_url,
-        updated_at: new Date(),
-      }
-
-      let { error } = await supabase.from('profiles').upsert(updates, {
-        returning: 'minimal', // Don't return the value after inserting
-      })
-
-      if (error) {
-        throw error
-      }
+        avatar_url
+      });
     } catch (error) {
       alert(error.message)
     } finally {
@@ -84,7 +47,7 @@ const Profile = ({ session }) => {
     <div className="form-widget">
       <div>
         <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={session.user.email} disabled />
+        <input id="email" type="text" value={user.email} disabled />
       </div>
       <div>
         <label htmlFor="username">Name</label>
@@ -104,22 +67,16 @@ const Profile = ({ session }) => {
           onChange={(e) => setWebsite(e.target.value)}
         />
       </div>
-
-      <div>
-        <button
-          className="button block primary"
-          onClick={() => updateProfile({ username, website, avatar_url })}
-          disabled={loading}
-        >
-          {loading ? 'Loading ...' : 'Update'}
-        </button>
-      </div>
       <div>
         {error && <p>{error.message}</p>}
       </div>
       <div>
-        <button className="button block" onClick={logoutHandler}>
-          Sign Out
+        <button
+          className="button block primary"
+          onClick={updateProfileHandler}
+          disabled={loading}
+        >
+          {loading ? 'Loading ...' : 'Update'}
         </button>
       </div>
     </div>

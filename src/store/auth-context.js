@@ -5,7 +5,10 @@ export const AuthContext = React.createContext({
   user: {},
   session: {},
   login: () => { },
-  logout: () => { }
+  logout: () => { },
+  getProfile: () => { },
+  updateProfile: (obj) => { },
+  createProfile: (user) => { }
 });
 
 const DEFAULT_DATA = {
@@ -51,11 +54,76 @@ const AuthContextProvider = (props) => {
     setSession(null);
   };
 
+  const getProfileHandler = async () => {
+    const user = supabase.auth.user();
+    let { data, error, status } = await supabase
+      .from('profiles')
+      .select(`username, website, avatar_url`)
+      .eq('id', user.id)
+      .single()
+
+    if (error && status !== 406) {
+      throw error
+    }
+
+    if (data) {
+      return {
+        username: data.username,
+        website: data.website,
+        avater_url: data.avatar_url
+      };
+    }
+  }
+
+  const createProfileHandler = async (user) => {
+    const insert = {
+      id: user.id,
+      username: '',
+      website: '',
+      avatar_url: '',
+      updated_at: new Date(),
+    }
+    const { error } = await supabase
+      .from('profiles')
+      .insert([
+        insert,
+      ], {
+        returning: 'minimal',
+      });
+
+    if (error) {
+      throw error
+    }
+  }
+
+  const updateProfileHandler = async (obj) => {
+    const user = supabase.auth.user()
+
+    const updates = {
+      id: user.id,
+      username: obj.username,
+      website: obj.website,
+      avatar_url: obj.avatar_url,
+      updated_at: new Date(),
+    }
+
+    let { error } = await supabase.from('profiles').upsert(updates, {
+      returning: 'minimal', // Don't return the value after inserting
+    })
+
+    if (error) {
+      throw error
+    }
+  }
+
   const contextValue = {
     user: user,
     session: session,
     login: loginHandler,
-    logout: logoutHandler
+    logout: logoutHandler,
+    getProfile: getProfileHandler,
+    updateProfile: updateProfileHandler,
+    createProfile: createProfileHandler
   };
 
   return <AuthContext.Provider value={contextValue}>

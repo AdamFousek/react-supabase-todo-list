@@ -1,4 +1,5 @@
 import { useState, useRef, useContext } from 'react'
+import { useHistory } from 'react-router';
 import { AuthContext } from '../store/auth-context';
 import { supabase } from '../supabase/supabase-client'
 
@@ -6,10 +7,11 @@ const Register = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
+  const history = useHistory();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const authCtx = useContext(AuthContext);
 
   const handleRegistration = async (e) => {
     e.preventDefault();
@@ -23,9 +25,8 @@ const Register = () => {
       setLoading(false);
       return;
     }
-    console.log({ user, session });
-    authCtx.login(user, session);
-    setLoading(false);
+
+    history.replace('/login');
   }
 
   return (

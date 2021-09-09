@@ -1,19 +1,31 @@
 import { Link } from "react-router-dom";
 import TodoList from "../components/Todos/TodoList";
+import { calcDate } from "../helpers/datetime";
 
-const DUMMY_TODOS = [
-  { id: 't1', task: 'Complete todo', is_complete: false, inserted_at: 1630298044, due_date: 1630298044 },
-  { id: 't2', task: 'Complete React Curse', is_complete: true, inserted_at: 1630298044, due_date: 1630298044 },
-  { id: 't3', task: 'Complete Everything', is_complete: false, inserted_at: 1630298044, due_date: 1630298044 },
-  { id: 't4', task: 'Complete Everything', is_complete: false, inserted_at: 1630298044, due_date: 1630298044 }
-]
+const Dashboard = ({ todos }) => {
+  let todaysTodo = [];
 
-const Dashboard = () => {
+  if (todos) {
+    todaysTodo = todos.filter((todo) => {
+      return calcDate(new Date(todo.due_date)) === 0;
+    })
+  }
+
+  if (!todaysTodo) {
+    return <section>
+      <h1>Welcome!</h1>
+      <h2>No todos for today!</h2>
+      <p><Link to='/add-todo'>Create one</Link></p>
+    </section>
+  }
+
   return <section>
     <h1>Welcome!</h1>
-    <h2>Your todos for today:</h2>
-    <TodoList todos={DUMMY_TODOS} />
-    <p><Link to='/todos'>Show all</Link></p>
+    <div>
+      <h2>Your todos for today:</h2>
+      <TodoList todos={todaysTodo} />
+      <p><Link to='/todos'>Show all</Link></p>
+    </div>
   </section>
 }
 

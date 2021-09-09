@@ -1,35 +1,60 @@
 import Card from "../UI/Card";
-import { useState } from "react";
+import { useState, useRef, useContext } from "react";
+import { useHistory } from "react-router";
+import { TodoContext } from "../../store/todo-context";
+import { AuthContext } from "../../store/auth-context";
 
-const AddTodoForm = (props) => {
-  const [task, setTask] = useState(null);
-  const [dueDate, setDuedate] = useState(null);
-  const [error, setError] = useState(props.error);
-
-  const addTodoHandler = (e) => {
-    e.preventDefault();
-    if (task === null) {
-      setError('Task must not be empty!');
-      return;
-    }
-
-    if (dueDate === null) {
-      setError('Due date must not be empty!');
-      return;
-    }
-
-    props.onAddTodoSubmit({ task, dueDate });
+const validateData = (task, dueDate) => {
+  if (task === null) {
+    throw new Error('Task must not be empty!');
   }
+
+  if (dueDate === null) {
+    throw new Error('Due date must not be empty!');
+  }
+
+  return true;
+}
+
+const AddTodoForm = () => {
+  const todoCtx = useContext(TodoContext);
+  const authCtx = useContext(AuthContext);
+  const taskInputRef = useRef();
+  const dueDateInputRef = useRef();
+  const [error, setError] = useState(null);
+
+  const history = useHistory();
+
+
+  const onAddTodoHandler = async (e) => {
+    e.preventDefault();
+    setError(null);
+    const task = taskInputRef.current.value;
+    const dueDate = dueDateInputRef.current.value;
+    const userId = authCtx.user.id;
+    try {
+      validateData(task, dueDate);
+      await todoCtx.addTodo({
+        task,
+        dueDate,
+        userId
+      })
+    } catch (error) {
+      setError(error);
+    }
+
+    history.replace('/todos');
+  }
+
   return <Card>
-    <form onSubmit={addTodoHandler}>
+    <form onSubmit={onAddTodoHandler}>
       <div className="form-widget">
         <div>
           <label htmlFor="task">Task</label>
           <input
             id="task"
             type="text"
-            value={task || ''}
-            onChange={(e) => setTask(e.target.value)}
+            ref={taskInputRef}
           />
         </div>
         <div>
@@ -37,8 +62,7 @@ const AddTodoForm = (props) => {
           <input
             id="due_date"
             type="datetime-local"
-            value={dueDate || ''}
-            onChange={(e) => setDuedate(e.target.value)}
+            ref={dueDateInputRef}
           />
         </div>
         {error && <p className="error">{error}</p>}

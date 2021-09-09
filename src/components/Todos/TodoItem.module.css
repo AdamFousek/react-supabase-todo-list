@@ -1,50 +1,65 @@
 .todo {
-  border: 1px solid #AAA;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px 0 rgba(200,200,200,0.5);
-  transition: 0.3s;
-  flex: 0 0 30%;
-  margin: 1rem auto;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(200, 200, 200, 0.5);
+    transition: 0.3s;
+    flex: 0 0 30%;
+    margin: 1rem auto;
+}
+.today {
+    border: 1px solid #ffa500;
+}
+
+.past {
+    border: 1px solid #fa3131;
+}
+
+.future {
+    border: 1px solid #35ff46;
+}
+
+.complete {
+    border: 1px solid blue !important;
 }
 
 .todo:hover {
-  box-shadow: 0 8px 16px 0 rgba(200,200,200,0.5);
+    box-shadow: 0 8px 16px 0 rgba(200, 200, 200, 0.5);
 }
 
 .todo h3 {
-  border-bottom: 1px solid white;
-  margin: 0;
-  padding: 1rem;
+    border-bottom: 1px solid white;
+    margin: 0;
+    padding: 1rem;
 }
 
 .content {
-  margin: 0;
-  padding: 1rem;
+    margin: 0;
+    padding: 1rem;
 }
 
 .content p {
-  margin: 10px 0;
+    margin: 10px 0;
 }
 
-.content .complete {
-  color: #35ff46;
+.content .textComplete {
+    color: #35ff46;
 }
 
 .content .incomplete {
-  color: #FFA500;
-} 
+    color: #ffa500;
+}
 
 button {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
 }
 
 button:hover {
-  border-color: white;
-  transition: 0.3s;
+    border-color: white;
+    transition: 0.3s;
 }
 
 .content .link {
-  text-align: center;
+    text-align: center;
 }

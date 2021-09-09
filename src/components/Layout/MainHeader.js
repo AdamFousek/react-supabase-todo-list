@@ -1,10 +1,17 @@
 import classes from './MainHeader.module.css';
 import { NavLink } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../store/auth-context';
 
-const MainHeader = (props) => {
-  const { session } = props;
+const MainHeader = () => {
+  const authCtx = useContext(AuthContext);
+  const user = authCtx.user;
 
-  if (!session) {
+  const logoutHandler = () => {
+    authCtx.logout();
+  }
+
+  if (!user) {
     return <header className={classes.nav}>
       <div className={classes.logo}>
         <NavLink to='/'>Todo App</NavLink>
@@ -23,6 +30,7 @@ const MainHeader = (props) => {
     <div className={classes.links}>
       <NavLink to='/todos' activeClassName={classes.active}>Todos</NavLink>
       <NavLink to='/profile' activeClassName={classes.active}>Profile</NavLink>
+      <button onClick={logoutHandler}>Logout</button>
     </div>
   </header>
 

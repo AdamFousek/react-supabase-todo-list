@@ -1,5 +1,6 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect, useContext } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { useHistory } from 'react-router';
 import MainHeader from './components/Layout/MainHeader';
 import Homepage from './Pages/Homepage';
 import Dashboard from './Pages/Dashboard';
@@ -9,47 +10,62 @@ import Profile from './Pages/Profile';
 import Todos from './Pages/Todos';
 import TodoDetail from './Pages/TodoDetail';
 import AddTodo from './Pages/AddTodo';
-import { useContext } from 'react';
 import { AuthContext } from './store/auth-context';
 import Register from './Pages/Register';
+import { TodoContext } from "./store/todo-context";
 
 
 const App = () => {
+  const history = useHistory();
   const authCtx = useContext(AuthContext);
-  const session = authCtx.session;
+  const todoCtx = useContext(TodoContext);
+  const todos = todoCtx.todos;
+  const user = authCtx.user;
+  const userId = user?.id;
+
+  useEffect(() => {
+    if (userId) {
+      todoCtx.fetchTodo();
+    }
+  }, [userId])
+
+  const onDeleteTodoHandler = (todoId) => {
+    history.replace('/todos');
+    todoCtx.removeTodo(todoId);
+  }
 
   return (
     <Fragment>
-      <MainHeader session={session} />
+      <MainHeader />
       <main className='main'>
         <Switch>
           <Route path='/' exact>
-            {!session && <Homepage />}
-            {session && <Dashboard session={session} />}
+            {!user && <Homepage />}
+            {user && <Dashboard todos={todos} />}
           </Route>
           <Route path='/login' exact>
-            {!session && <Login />}
-            {session && <Redirect to='/profile' />}
+            {!user && <Login />}
+            {user && <Redirect to='/profile' />}
           </Route>
           <Route path='/register' exact>
-            {!session && <Register />}
-            {session && <Redirect to='/profile' />}
+            {!user && <Register />}
+            {user && <Redirect to='/profile' />}
           </Route>
           <Route path='/profile' exact>
-            {!session && <Redirect to='/' />}
-            {session && <Profile session={session} />}
+            {!user && <Redirect to='/login' />}
+            {user && <Profile />}
           </Route>
           <Route path='/todos' exact>
-            {!session && <Redirect to='/' />}
-            {session && <Todos session={session} />}
+            {!user && <Redirect to='/' />}
+            {user && <Todos user={user} todos={todos} />}
           </Route>
           <Route path='/todos/:todoId'>
-            {!session && <Redirect to='/' />}
-            {session && <TodoDetail session={session} />}
+            {!user && <Redirect to='/' />}
+            {user && <TodoDetail onDeleteTodo={onDeleteTodoHandler} />}
           </Route>
           <Route path='/add-todo' exact>
-            {!session && <Redirect to='/' />}
-            {session && <AddTodo session={session} />}
+            {!user && <Redirect to='/' />}
+            {user && <AddTodo />}
           </Route>
           <Route path='*'>
             <NotFound />
