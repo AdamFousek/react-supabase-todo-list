@@ -1,5 +1,5 @@
 import TodoItem from './TodoItem';
-import classes from './TodoList.module.css';
+import classes from './../../css/TodoList.module.css';
 
 const TodoList = ({ todos }) => {
   const mapTodos = todos.map(item => <TodoItem key={item.id} todo={item} />);

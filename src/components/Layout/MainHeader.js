@@ -1,4 +1,4 @@
-import classes from './MainHeader.module.css';
+import classes from './../../css/MainHeader.module.css';
 import { NavLink } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../../store/auth-context';

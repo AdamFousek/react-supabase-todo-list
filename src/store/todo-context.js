@@ -24,6 +24,14 @@ const TodoContextProvider = (props) => {
   const [selectedTodo, setSelectedTodo] = useState();
 
   const addTodoHandler = async (todoData) => {
+    if (todoData.task.trim().length === 0) {
+      throw new Error('Task must not be empty!');
+    }
+
+    if (todoData.dueDate.trim().length === 0) {
+      throw new Error('Due date must not be empty!');
+    }
+
     const insertedTodo = {
       is_complete: false,
       task: todoData.task,

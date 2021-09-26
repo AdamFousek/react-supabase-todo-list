@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
 import TodoList from "../components/Todos/TodoList";
 import { calcDate } from "../helpers/datetime";
+import { useContext, useEffect } from 'react';
+import { TodoContext } from "../store/todo-context";
 
-const Dashboard = ({ todos }) => {
+const Dashboard = () => {
+  const todoCtx = useContext(TodoContext);
+  const todos = todoCtx.todos;
+
+  useEffect(() => {
+    todoCtx.fetchTodo();
+  }, []);
+
   let todaysTodo = [];
 
   if (todos) {
@@ -11,7 +20,7 @@ const Dashboard = ({ todos }) => {
     })
   }
 
-  if (!todaysTodo) {
+  if (todaysTodo.length === 0) {
     return <section>
       <h1>Welcome!</h1>
       <h2>No todos for today!</h2>

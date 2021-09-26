@@ -1,19 +1,22 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { TodoContext } from "../store/todo-context";
-import classes from './TodoDetail.module.css';
+import { DateTime } from 'luxon';
+import classes from './../css/TodoDetail.module.css';
 
 const TodoDetail = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [wasChanged, setWasChanged] = useState(null);
   const [error, setError] = useState(null);
   const params = useParams();
+  const history = useHistory();
   const todoId = params.todoId;
   const todoCtx = useContext(TodoContext);
   const todo = todoCtx.selectedTodo;
 
   useEffect(() => {
+    console.log('test');
     if (todoId) {
       try {
         todoCtx.fetchTodoById(todoId);
@@ -24,7 +27,8 @@ const TodoDetail = (props) => {
   }, [todoId, wasChanged]);
 
   const deleteTodoHandler = async () => {
-    props.onDeleteTodo(todoId);
+    todoCtx.removeTodo(todoId);
+    history.push('/todos');
   };
 
   const toggleTodo = async () => {
@@ -54,8 +58,8 @@ const TodoDetail = (props) => {
   return <section>
     <h2>{todo.task}</h2>
     <h3>{completeField}</h3>
-    <p>Due date: Date</p>
-    <p>Inserted date: Date</p>
+    <p>Due date: {DateTime.fromISO(todo.due_date).toFormat('d. L. y H:mm')}</p>
+    <p>Inserted date: {DateTime.fromISO(todo.inserted_at).toFormat('d. L. y H:mm')}</p>
     <div className={classes.actions}>
       <button className={classes.red} onClick={deleteTodoHandler} disabled={isLoading}>Delete todo</button>
       <button onClick={toggleTodo} disabled={isLoading}>

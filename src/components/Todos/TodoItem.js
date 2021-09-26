@@ -1,8 +1,10 @@
-import classes from './TodoItem.module.css';
+import classes from './../../css/TodoItem.module.css';
 import { Link } from 'react-router-dom';
-import { convertToDate, convertToTime, calcDate } from '../../helpers/datetime';
+import { calcDate } from '../../helpers/datetime';
+import { DateTime } from 'luxon';
 import { useContext } from 'react';
 import { TodoContext } from '../../store/todo-context';
+import className from 'classnames';
 
 
 const TodoItem = ({ todo }) => {
@@ -17,26 +19,21 @@ const TodoItem = ({ todo }) => {
   const buttonText = todo.is_complete === true ? 'Not completed' : 'Complete todo';
 
   const calculatedDate = calcDate(new Date(todo.due_date));
-  let todoClass;
-  if (calculatedDate === 1) {
-    todoClass = `${classes.todo} ${classes.future}`;
-  } else if (calculatedDate === -1) {
-    todoClass = `${classes.todo} ${classes.past}`;
-  } else {
-    todoClass = `${classes.todo} ${classes.today}`;
-  }
-
-  if (todo.is_complete) {
-    todoClass = todoClass + ` ${classes.complete}`;
-  }
+  const todoClass = className({
+    [`${classes.todo}`]: true,
+    [`${classes.future}`]: calculatedDate === 1,
+    [`${classes.past}`]: calculatedDate === -1,
+    [`${classes.today}`]: calculatedDate === 0,
+    [`${classes.complete}`]: todo.is_complete,
+  });
 
   return <div className={todoClass}>
     <h3>{todo.task}</h3>
     <div className={classes.content}>
       {completeField}
       <p><strong>Due date:</strong></p>
-      <p> {convertToDate(todo.due_date)}</p>
-      <p> {convertToTime(todo.due_date)}</p>
+      <p> {DateTime.fromISO(todo.due_date).toFormat('d. L. y')}</p>
+      <p> {DateTime.fromISO(todo.due_date).toFormat('H:mm')}</p>
       <button className={classes.button} onClick={toggleTodoHandler}>{buttonText}</button>
       <p className={classes.link}>
         <Link to={`/todos/${todo.id}`}>Show todo</Link>

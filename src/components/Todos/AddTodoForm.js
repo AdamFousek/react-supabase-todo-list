@@ -4,18 +4,6 @@ import { useHistory } from "react-router";
 import { TodoContext } from "../../store/todo-context";
 import { AuthContext } from "../../store/auth-context";
 
-const validateData = (task, dueDate) => {
-  if (task === null) {
-    throw new Error('Task must not be empty!');
-  }
-
-  if (dueDate === null) {
-    throw new Error('Due date must not be empty!');
-  }
-
-  return true;
-}
-
 const AddTodoForm = () => {
   const todoCtx = useContext(TodoContext);
   const authCtx = useContext(AuthContext);
@@ -33,7 +21,6 @@ const AddTodoForm = () => {
     const dueDate = dueDateInputRef.current.value;
     const userId = authCtx.user.id;
     try {
-      validateData(task, dueDate);
       await todoCtx.addTodo({
         task,
         dueDate,
@@ -41,6 +28,7 @@ const AddTodoForm = () => {
       })
     } catch (error) {
       setError(error);
+      return;
     }
 
     history.replace('/todos');
@@ -65,7 +53,7 @@ const AddTodoForm = () => {
             ref={dueDateInputRef}
           />
         </div>
-        {error && <p className="error">{error}</p>}
+        {error && <p className="error">{error.message}</p>}
         <div>
           <button type="submit" className="button block primary">
             Add Todo
